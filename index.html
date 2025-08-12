@@ -6,6 +6,15 @@
   <title>NYAN SSRL - Niurka Yan · Seguridad Social y Relaciones Laborales</title>
   <link rel="icon" href="images/favicon.ico" />
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      // Coloca aquí tu PUBLIC_KEY de EmailJS
+      emailjs.init("YaDZVR9F3SueV8Gpd");
+    })();
+  </script>
 </head>
 <body>
   <header class="site-header" id="top">
@@ -145,7 +154,9 @@
             <p><strong>Dirección:</strong> Santo Domingo, R.D</p>
             <p><strong>Redes:</strong> Síguenos en redes: (agregar enlaces)</p>
           </div>
-          <form action="" method="POST" class="contact-form">
+
+          <!-- Formulario de contacto con EmailJS -->
+          <form id="contact-form" class="contact-form">
             <label for="name">Nombre</label>
             <input id="name" name="name" required />
             <label for="email">Correo</label>
@@ -154,6 +165,7 @@
             <textarea id="message" name="message" rows="5" required></textarea>
             <button type="submit" class="btn">Enviar mensaje</button>
           </form>
+          <p id="form-status" style="margin-top:10px;"></p>
         </div>
       </div>
     </section>
@@ -165,6 +177,27 @@
       <p class="small">RNC: 000-0000000-0</p>
     </div>
   </footer>
+
+  <!-- Script EmailJS -->
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const form = this;
+      const status = document.getElementById('form-status');
+
+      emailjs.sendForm('service_kgyqnei', 'template_u1v6mpl', form)
+        .then(() => {
+          status.textContent = "✅ Mensaje enviado con éxito.";
+          status.style.color = "green";
+          form.reset();
+        }, (err) => {
+          status.textContent = "❌ Error al enviar el mensaje. Intenta nuevamente.";
+          status.style.color = "red";
+          console.error("EmailJS Error:", err);
+        });
+    });
+  </script>
 
   <script src="js/script.js"></script>
 </body>
